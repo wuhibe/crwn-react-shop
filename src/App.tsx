@@ -1,5 +1,7 @@
+import CategoryMenu from './components/category-menu/category-menu.component'
+
 function App() {
-  return <div>Hello World</div>
+  return <CategoryMenu />
 }
 
 export default App
