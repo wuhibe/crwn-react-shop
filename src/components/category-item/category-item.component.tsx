@@ -5,7 +5,7 @@ interface CategoryItemProps {
   imageUrl: string
 }
 
-const CategoryItem = ({title, imageUrl}: CategoryItemProps) => (
+const CategoryItem = ({ title, imageUrl }: CategoryItemProps) => (
   <div className='category-container'>
     <div
       className='background-image'

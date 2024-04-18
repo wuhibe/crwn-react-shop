@@ -32,7 +32,7 @@ const Directory = () => {
 
   return (
     <div className='directory-container'>
-      {categories.map(({id, title, imageUrl}) => (
+      {categories.map(({ id, title, imageUrl }) => (
         <CategoryItem key={id} title={title} imageUrl={imageUrl} />
       ))}
     </div>
