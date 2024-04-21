@@ -5,6 +5,8 @@ import {
   GoogleAuthProvider,
   User,
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  AuthError,
 } from 'firebase/auth'
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore'
 
@@ -46,7 +48,7 @@ export const createUserDocumentFromAuth = async (userAuth: User) => {
   return userDocRef
 }
 
-export const createUserWithEmailAndPasswordFromForm = async (
+export const createAuthUserWithEmailAndPassword = async (
   email: string,
   password: string
 ) => {
@@ -55,4 +57,20 @@ export const createUserWithEmailAndPasswordFromForm = async (
     return
   }
   return createUserWithEmailAndPassword(auth, email, password)
+}
+
+export const signInAuthUserWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
+  if (!email || !password) {
+    console.error('Email and password are required')
+    return
+  }
+  return signInWithEmailAndPassword(auth, email, password)
+}
+
+export const handleAuthError = (error: AuthError) => {
+  const errorMessage = error.message
+  alert(errorMessage.split(':')[1])
 }

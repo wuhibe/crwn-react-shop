@@ -1,7 +1,8 @@
 import { useState, ChangeEvent } from 'react'
 import {
   createUserDocumentFromAuth,
-  createUserWithEmailAndPasswordFromForm,
+  createAuthUserWithEmailAndPassword,
+  handleAuthError,
 } from '../../utils/firebase/firebase.utils'
 import { AuthError, UserCredential } from 'firebase/auth'
 import FormInput from '../form-input/form-input.component'
@@ -28,7 +29,7 @@ const SignUpForm = () => {
     }
     try {
       setLoading(true)
-      createUserWithEmailAndPasswordFromForm(email, password)
+      createAuthUserWithEmailAndPassword(email, password)
         .then((response: UserCredential | undefined) => {
           if (!response) {
             console.error('No response from firebase')
@@ -36,21 +37,15 @@ const SignUpForm = () => {
           }
           createUserDocumentFromAuth({ ...response.user, displayName })
             .then(() => setFormFields(defaultFormFields))
-            .catch((error) => console.error(error))
+            .catch((error: AuthError) => {
+              console.error(error)
+              handleAuthError(error)
+            })
             .finally(() => setLoading(false))
         })
         .catch((error: AuthError) => {
-          console.log(error)
-          if (error.code == 'auth/email-already-in-use') {
-            alert('The email address is already in use')
-          } else if (error.code == 'auth/invalid-email') {
-            alert('The email address is not valid.')
-          } else if (error.code == 'auth/operation-not-allowed') {
-            alert('Operation not allowed.')
-          } else if (error.code == 'auth/weak-password') {
-            alert('The password is too weak.')
-          }
           console.error(error)
+          handleAuthError(error)
           setLoading(false)
         })
     } catch (error) {
@@ -71,7 +66,6 @@ const SignUpForm = () => {
         <FormInput
           label='Display Name'
           type='text'
-          id='displayName'
           name='displayName'
           required
           onChange={handleChange}
@@ -80,7 +74,6 @@ const SignUpForm = () => {
         <FormInput
           label='Email'
           type='email'
-          id='email'
           name='email'
           required
           onChange={handleChange}
@@ -89,7 +82,6 @@ const SignUpForm = () => {
         <FormInput
           label='Password'
           type='password'
-          id='password'
           name='password'
           required
           onChange={handleChange}
@@ -98,7 +90,6 @@ const SignUpForm = () => {
         <FormInput
           label='Confirm Password'
           type='password'
-          id='confirmPassword'
           name='confirmPassword'
           required
           onChange={handleChange}
