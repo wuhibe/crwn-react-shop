@@ -19,6 +19,7 @@ const firebaseConfig = {
   appId: '1:384794891908:web:e11a5b6cf5a8759b75d4d1',
 }
 
+// @ts-expect-error unused variable
 const firebaseApp = initializeApp(firebaseConfig)
 
 const googleProvider = new GoogleAuthProvider()
