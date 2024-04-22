@@ -6,8 +6,8 @@ import {
 } from '../../utils/firebase/firebase.utils'
 import { AuthError, UserCredential } from 'firebase/auth'
 import FormInput from '../form-input/form-input.component'
-import './sign-up-form.styles.scss'
 import Button from '../button/button.component'
+import './sign-up-form.styles.scss'
 
 const defaultFormFields = {
   displayName: '',
@@ -27,30 +27,23 @@ const SignUpForm = () => {
       alert("Passwords don't match")
       return
     }
-    try {
-      setLoading(true)
-      createAuthUserWithEmailAndPassword(email, password)
-        .then((response: UserCredential | undefined) => {
-          if (!response) {
-            console.error('No response from firebase')
-            return
-          }
-          createUserDocumentFromAuth({ ...response.user, displayName })
-            .then(() => setFormFields(defaultFormFields))
-            .catch((error: AuthError) => {
-              console.error(error)
-              handleAuthError(error)
-            })
-            .finally(() => setLoading(false))
-        })
-        .catch((error: AuthError) => {
-          console.error(error)
-          handleAuthError(error)
-          setLoading(false)
-        })
-    } catch (error) {
-      console.error(error)
-    }
+    setLoading(true)
+    createAuthUserWithEmailAndPassword(email, password)
+      .then((response: UserCredential | undefined) => {
+        if (!response) {
+          console.error('No response from firebase')
+          return
+        }
+        createUserDocumentFromAuth({ ...response.user, displayName })
+          .then(() => setFormFields(defaultFormFields))
+          .catch(handleAuthError)
+          .finally(() => setLoading(false))
+      })
+      .catch((error: AuthError) => {
+        console.error(error)
+        handleAuthError(error)
+        setLoading(false)
+      })
   }
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

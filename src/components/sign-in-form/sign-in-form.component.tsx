@@ -1,14 +1,12 @@
 import { useState, ChangeEvent } from 'react'
 import {
   signInWithGooglePopup,
-  createUserDocumentFromAuth,
   signInAuthUserWithEmailAndPassword,
   handleAuthError,
 } from '../../utils/firebase/firebase.utils'
 import FormInput from '../form-input/form-input.component'
 import Button from '../button/button.component'
 import './sign-in-form.styles.scss'
-import { AuthError } from 'firebase/auth'
 
 const defaultFormFields = {
   email: '',
@@ -22,34 +20,21 @@ const SignInForm = () => {
 
   const signInWithGoogle = () => {
     signInWithGooglePopup()
-      .then((response) => {
-        console.log(response)
-        createUserDocumentFromAuth(response.user)
-          .then(() => {
-            console.log('User document created')
-          })
-          .catch((error) => console.error(error))
+      .then(() => {
+        // pass
       })
-      .catch((error) => console.error(error))
+      .catch(handleAuthError)
   }
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
-    try {
-      setLoading(true)
-      signInAuthUserWithEmailAndPassword(email, password)
-        .then((response) => {
-          console.log({ response })
-          console.log('User signed in')
-          setFormFields(defaultFormFields)
-        })
-        .catch((error: AuthError) => {
-          console.error(error)
-          handleAuthError(error)
-        })
-        .finally(() => setLoading(false))
-    } catch (error) {
-      console.error(error)
-    }
+    setLoading(true)
+    signInAuthUserWithEmailAndPassword(email, password)
+      .then(() => {
+        setFormFields(defaultFormFields)
+      })
+      .catch(handleAuthError)
+      .finally(() => setLoading(false))
   }
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

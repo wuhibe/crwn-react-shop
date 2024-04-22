@@ -6,6 +6,8 @@ import {
   User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
   AuthError,
 } from 'firebase/auth'
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore'
@@ -75,3 +77,9 @@ export const handleAuthError = (error: AuthError) => {
   const errorMessage = error.message
   alert(errorMessage.split(':')[1])
 }
+
+export const signOutAuthUser = () => signOut(auth)
+
+export const onAuthStateChangedHandler = (
+  callback: (user: User | null) => void
+) => onAuthStateChanged(auth, callback)
