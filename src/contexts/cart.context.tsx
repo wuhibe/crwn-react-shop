@@ -16,6 +16,17 @@ const addCartItem = (cartItems: CartItemInterface[], product: Product) => {
   }
 }
 
+const removeCartItem = (cartItems: CartItemInterface[], product: Product) => {
+  const match = cartItems.find((item) => item.id === product.id)
+  if (match && match.quantity > 1) {
+    return cartItems.map((item) =>
+      item.id === product.id ? { ...item, quantity: item.quantity - 1 } : item
+    )
+  } else {
+    return cartItems.filter((item) => item.id !== product.id)
+  }
+}
+
 export const CartContext = createContext<CartContextInterface>({
   isCartOpen: false,
   setIsCartOpen: (_status: boolean) => {
@@ -24,6 +35,12 @@ export const CartContext = createContext<CartContextInterface>({
   cartItems: [],
   cartItemsCount: 0,
   addItemToCart: (_product: Product) => {
+    console.log(_product)
+  },
+  removeItemFromCart: (_product: Product) => {
+    console.log(_product)
+  },
+  removeProductFromCart: (_product: Product) => {
     console.log(_product)
   },
 })
@@ -36,6 +53,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const addItemToCart = (product: Product) => {
     setCartItems(addCartItem(cartItems, product))
   }
+  const removeItemFromCart = (product: Product) => {
+    setCartItems(removeCartItem(cartItems, product))
+  }
+  const removeProductFromCart = (product: Product) => {
+    setCartItems(cartItems.filter((item) => item.id !== product.id))
+  }
 
   useEffect(() => {
     setCartItemsCount(cartItems.reduce((sum, item) => item.quantity + sum, 0))
@@ -46,6 +69,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setIsCartOpen,
     cartItems,
     addItemToCart,
+    removeItemFromCart,
+    removeProductFromCart,
     cartItemsCount,
   }
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

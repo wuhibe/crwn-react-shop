@@ -10,4 +10,10 @@ export interface CartContextInterface {
   cartItems: CartItemInterface[]
   cartItemsCount: number
   addItemToCart: (product: Product) => void
+  removeItemFromCart: (product: Product) => void
+  removeProductFromCart: (product: Product) => void
+}
+
+export interface CheckoutItemProps {
+  item: CartItemInterface
 }
