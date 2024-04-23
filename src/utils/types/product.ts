@@ -4,3 +4,11 @@ export interface Product {
   imageUrl: string
   price: number
 }
+
+export interface ProductCardProps {
+  product: Product
+}
+
+export interface ProductContextInterface {
+  products: Product[]
+}

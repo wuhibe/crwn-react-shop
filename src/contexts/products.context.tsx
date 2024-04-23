@@ -1,10 +1,8 @@
 import { ReactNode, createContext, useState, useEffect } from 'react'
 import SHOP_DATA from '../shop-data.json'
-import { Product } from '../utils/types/product'
+import { Product, ProductContextInterface } from '../utils/types/product'
 
-export const ProductsContext = createContext<{
-  products: Product[]
-}>({
+export const ProductsContext = createContext<ProductContextInterface>({
   products: [],
 })
 
